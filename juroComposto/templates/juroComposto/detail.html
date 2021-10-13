@@ -1,0 +1,16 @@
+<h1>{{ igpm.data }}</h1>
+<ul>
+    <li>{{ igpm.taxa }}</li>
+</ul>
+
+
+<form action="{% url 'juroComposto:updateIgpm' igpm.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ igpm.data }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <input type="text" name="taxa" id="taxa" value="{{ igpm.taxa }}">
+        <br>
+</fieldset>
+<input type="submit" value="update">
+</form>

@@ -1,0 +1,9 @@
+{% if latest_igpm_list %}
+    <ul>
+    {% for igpm in latest_igpm_list %}
+        <li><a href="{% url 'juroComposto:detail' igpm.id %}">{{ igpm.data }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No IGPM are available.</p>
+{% endif %}
