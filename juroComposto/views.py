@@ -12,6 +12,10 @@ from django.http import Http404
 from django.urls import reverse
 from decimal import Decimal
 from django.views import generic
+import json
+from juroComposto.uteis import openJuroComposto
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
 
 def list(request):
     latest_igpm_list = igpm.objects.order_by('-data')[:5]
@@ -62,3 +66,17 @@ def updateIgpm(request, igpm_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('juroComposto:index'))
+
+def juroCompostoTable(request):
+    tempo = request.FILES['upload']
+    jct = openJuroComposto(tempo.read())
+    return HttpResponse(jct["dataCalculo"])
+
+def upload(request):
+    if request.method == 'POST' and request.FILES['upload']:
+        upload = request.FILES['upload']
+        #fss = FileSystemStorage()
+        #file = fss.save(upload.name, upload)
+        #file_url = fss.url(file)
+        return render(request, 'juroCompostoTable/', {'data': upload})
+    return render(request, 'juroComposto/upload.html')
