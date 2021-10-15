@@ -13,9 +13,12 @@ from django.urls import reverse
 from decimal import Decimal
 from django.views import generic
 import json
-from juroComposto.uteis import openJuroComposto
+from juroComposto.uteis import openJuroComposto, calcLine
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+from django.http import JsonResponse
+from datetime import datetime
+from dateutil import parser
 
 def list(request):
     latest_igpm_list = igpm.objects.order_by('-data')[:5]
@@ -33,7 +36,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return igpm.objects.order_by('-data')[:5]
+        return igpm.objects.order_by('-data')
 
 #def detail(request, igpm_id):
 #    try:
@@ -70,7 +73,21 @@ def updateIgpm(request, igpm_id):
 def juroCompostoTable(request):
     tempo = request.FILES['upload']
     jct = openJuroComposto(tempo.read())
-    return HttpResponse(jct["dataCalculo"])
+    juroMes = jct['juroMes']
+    multa = jct['multa']
+    hono = jct['honorarios']
+    dc = parser.parse(jct['dataCalculo'])
+    for linha in jct['Linhas']:
+        valorD = linha['valorDevido']
+        dataD = parser.parse(linha['dataDivida'])
+        cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
+        linha['multa'] = cdo[0]
+        linha['igpmAcumulado'] = cdo[1]
+        linha['correcao'] = cdo[2]
+        linha['juros'] = cdo[3]
+        linha['honorarios'] = cdo[4]
+        linha['total'] = cdo[5]
+    return JsonResponse(jct)
 
 def upload(request):
     if request.method == 'POST' and request.FILES['upload']:

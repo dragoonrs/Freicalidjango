@@ -34,11 +34,11 @@ def meses(inicio, fim):
 
 def calcLine(juroMes, multa, honorarios, dataCalculo, dataDivida, valorDevido):
         linha = [0,0,0,0,0,0]
-        linha[0] = valorDevido*multa;
+        linha[0] = valorDevido*(multa/100);
         linha[1] = igpmAcumulado(dataDivida, dataCalculo);
         linha[2] = (valorDevido + linha[0])*linha[1]
-        linha[3] = (valorDevido + linha[0]) * (pow(1+(juroMes/100), meses(dataDivida, dataCalculo)))
-        linha[4] = (valorDevido + linha[0] + linha[3])*(1+(honorarios/100))
+        linha[3] = (valorDevido + linha[0]) * ((pow(1+(juroMes/100), meses(dataDivida, dataCalculo)))-1)
+        linha[4] = (valorDevido + linha[0] + linha[3])*((honorarios/100))
         linha[5] = linha[0] + linha[2] + linha[3] + linha[4]
         return linha
 
