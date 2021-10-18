@@ -1,6 +1,8 @@
 import json
+from .models import igpm
+import decimal
 
-from datetime import datetime
+import datetime
 
 def read_file(path):
     file = open(path, "r")
@@ -24,7 +26,12 @@ def openJuroComposto(data):
     return json.loads(data)
 
 def igpmAcumulado(inicio, fim):
-    return 1.0
+    dataInicio = datetime.date(inicio.year, inicio.month, 1)
+    dataFim = datetime.date(fim.year, fim.month, 2)
+    taxaFinal = decimal.Decimal(1.0)
+    for taxas in igpm.objects.order_by('data').filter(data__range=(dataInicio, dataFim)):
+            taxaFinal = taxas.multiplicadorAbsoluto * taxaFinal
+    return float(taxaFinal) - 1.0
 
 def meses(inicio, fim):
     d = ((fim.year - inicio.year) * 12) + (fim.month - inicio.month)
