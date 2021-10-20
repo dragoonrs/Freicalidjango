@@ -38,6 +38,9 @@ class IndexView(generic.ListView):
         """Return the last five published questions."""
         return igpm.objects.order_by('-data')
 
+def atualizacao(request):
+    return render(request, 'juroComposto/atualizacao.html')
+
 #def detail(request, igpm_id):
 #    try:
 #        igpmt = igpm.objects.get(pk=igpm_id)

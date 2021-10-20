@@ -1,0 +1,101 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <title>jquery-rsLiteGrid plug-in</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="{% static 'juroComposto/js/jquery.rsLiteGrid.js'%}"></script>
+  <script>
+    $(document).ready(function () {
+      $('.dados').rsLiteGrid({
+
+                    cols: [{
+                      name: 'dataDívida',
+                      header: 'Data da Dívida',
+                      markup: '<input type="date" class="form-control">'
+                    }, {
+                      name: 'valorDevido',
+                      header: 'Valor da Divida',
+                      markup: '<input type="number" class="form-control">',
+                      defaultValue: '0'
+                    }, {
+                      name: 'multa',
+                      header: 'Multa',
+                      markup: '<input type="number" class="form-control" disabled>'
+                    }, {
+                      name: 'igpmAcumulado',
+                      header: 'IGPM Acumulado',
+                      markup: '<input type="number" class="form-control" disabled>'
+                    }, {
+                      name: 'correcao',
+                      header: 'Correção',
+                      markup: '<input type="number" class="form-control" disabled>'
+                    }, {
+                      name: 'juros',
+                      header: 'Juros',
+                      markup: '<input type="number" class="form-control" disabled>'
+                    }, {
+                      name: 'honorarios',
+                      header: 'Honorarios',
+                      markup: '<input type="number" class="form-control" disabled>'
+                    }, {
+                      name: 'total',
+                      header: 'Total',
+                      markup: '<input type="number" class="form-control" disabled>'
+                    }, {
+                          // Delete button needs no name, since this columns does not need to be exported to Json
+                          markup: '<button title="delete this row">X</button>',
+                          tabStop: false
+        }],
+
+        // event fired after each row is appended to the table.
+        // The right place to set the click event for the delete row button
+        onAddRow: function (event, $lastNewRow) {
+          $('button', $lastNewRow).click(function () {
+            $('.dados').rsLiteGrid('delRow', $lastNewRow);
+          });
+        }
+
+        // load table with 2 rows of data
+      }).rsLiteGrid('setData', [
+
+        ]);
+
+      // export data
+      $('.dados + button').click(function () {
+        console.log($('.dados').rsLiteGrid('getData'));
+        alert('Open your browser console to see the Json data.');
+      });
+        //$('.dados').rsLiteGrid('setData',
+        //        [{dataDívida: '2021-10-15', valorDevido: 100, multa: 10.10, igpmAcumulado: 5.5, correcao: 50.50, juros: 9.99, honorarios: 7.77, total: 8.88}]);
+
+        $('.clickMe').click(function () {
+            $('.dados').rsLiteGrid('setData',
+                [{dataDívida: '2021-10-15', valorDevido: 100, multa: 10.10, igpmAcumulado: 5.5, correcao: 50.50, juros: 9.99, honorarios: 7.77, total: 8.88}]
+                                                    );
+                                        });
+        $('.addRow').click(function () {
+            $('.dados').rsLiteGrid('addRow');
+                                        });
+    });
+  </script>
+</head>
+<body>
+<div>
+    <div>
+        <input type="date" class="dataCalculo" name="dataCalculo" id="dataCalculo" >
+                <label for="dataCalculo">Data de Cálculo</label><br>
+        <input type="number" class="multa" name="multa" id="multa" min="0" step="any" value="0">
+                <label for="multa">Multa</label><br>
+        <input type="number" class="honorarios" name="honorarios" id="honorarios" min="0" step="any" value="0">
+                <label for="honorarios">Honorarios</label><br>
+    </div>
+    <div>
+	    <table class="dados"></table>
+    </div>
+    <br>
+    <input id="clickMe" class='clickMe' type="button" value="Teste Preeencher 1 linha" />
+    <input id="addRow" class='addRow' type="button" value="Adicionar Linha" />
+</div>
+</body>
+</html>
