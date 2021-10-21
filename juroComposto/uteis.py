@@ -4,6 +4,8 @@ import decimal
 
 import datetime
 
+from dateutil import parser
+
 def read_file(path):
     file = open(path, "r")
     data = file.read()
@@ -49,3 +51,6 @@ def calcLine(juroMes, multa, honorarios, dataCalculo, dataDivida, valorDevido):
         linha[5] = linha[0] + linha[2] + linha[3] + linha[4]
         return linha
 
+def gerarJsonVazio():
+    dados = {	"juroMes": 0,	"multa": 10,	"honorarios": 10,	"dataCalculo": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S %z'), 'lihas':[]}
+    return json.dumps(dados)

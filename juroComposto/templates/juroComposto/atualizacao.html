@@ -5,6 +5,7 @@
   <title>jquery-rsLiteGrid plug-in</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="{% static 'juroComposto/js/jquery.rsLiteGrid.js'%}"></script>
+    {{ jct|json_script:"jct" }}
   <script>
     $(document).ready(function () {
       $('.dados').rsLiteGrid({
@@ -48,8 +49,7 @@
                           tabStop: false
         }],
 
-        // event fired after each row is appended to the table.
-        // The right place to set the click event for the delete row button
+        // evento que acontece quando uma nova linha e criada e adiciona o botao de apagar.
         onAddRow: function (event, $lastNewRow) {
           $('button', $lastNewRow).click(function () {
             $('.dados').rsLiteGrid('delRow', $lastNewRow);
@@ -66,29 +66,52 @@
         console.log($('.dados').rsLiteGrid('getData'));
         alert('Open your browser console to see the Json data.');
       });
-        //$('.dados').rsLiteGrid('setData',
-        //        [{dataDívida: '2021-10-15', valorDevido: 100, multa: 10.10, igpmAcumulado: 5.5, correcao: 50.50, juros: 9.99, honorarios: 7.77, total: 8.88}]);
 
-        $('.clickMe').click(function () {
-            $('.dados').rsLiteGrid('setData',
+      $('.addRow').click(function () {
+            $('.dados').rsLiteGrid('addRow');
+            });
+
+      const dadosj = JSON.parse(document.getElementById('jct').textContent);
+      //const dadosj = JSON.parse(dj);
+      $('#multa').val(dadosj.multa);
+      $('#juros').val(dadosj.juroMes);
+      $('#honorarios').val(dadosj.honorarios);
+      var d = new Date(dadosj.dataCalculo);
+      $('#dataCalculo').val(d.toISOString().substr(0, d.toISOString().indexOf('T')));
+
+
+       $('.clickMe').click(function () {
+           $('.dados').rsLiteGrid('setData',
                 [{dataDívida: '2021-10-15', valorDevido: 100, multa: 10.10, igpmAcumulado: 5.5, correcao: 50.50, juros: 9.99, honorarios: 7.77, total: 8.88}]
                                                     );
-                                        });
-        $('.addRow').click(function () {
-            $('.dados').rsLiteGrid('addRow');
-                                        });
+       });
+
+        $('.teste').click(function () {
+            $('#multa').val("1");
+            alert("Eu sou um alert!");
+            });
+
     });
   </script>
 </head>
 <body>
 <div>
     <div>
-        <input type="date" class="dataCalculo" name="dataCalculo" id="dataCalculo" >
-                <label for="dataCalculo">Data de Cálculo</label><br>
-        <input type="number" class="multa" name="multa" id="multa" min="0" step="any" value="0">
-                <label for="multa">Multa</label><br>
-        <input type="number" class="honorarios" name="honorarios" id="honorarios" min="0" step="any" value="0">
-                <label for="honorarios">Honorarios</label><br>
+        <label for="dataCalculo">Data de Cálculo</label>
+        <input type="date" class="dataCalculo" name="dataCalculo" id="dataCalculo">
+                <br>
+        <label for="multa">Multa</label>
+        <input type="number" class="multa" name="multa" id="multa" min="0" step="any">
+        <label for="multa">%</label>
+                <br>
+        <label for="honorarios">Honorarios</label>
+        <input type="number" class="honorarios" name="honorarios" id="honorarios" min="0" step="any"}>
+        <label for="honorarios">%</label>
+                <br>
+        <label for="juros">Juros</label>
+        <input type="number" class="juros" name="juros" id="juros" min="0" step="any"}>
+        <label for="juros">%</label>
+                <br>
     </div>
     <div>
 	    <table class="dados"></table>
@@ -96,6 +119,7 @@
     <br>
     <input id="clickMe" class='clickMe' type="button" value="Teste Preeencher 1 linha" />
     <input id="addRow" class='addRow' type="button" value="Adicionar Linha" />
+    <input id="teste" class='teste' type="button" value="teste" />
 </div>
 </body>
 </html>

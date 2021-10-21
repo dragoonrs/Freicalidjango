@@ -13,7 +13,7 @@ from django.urls import reverse
 from decimal import Decimal
 from django.views import generic
 import json
-from juroComposto.uteis import openJuroComposto, calcLine
+from juroComposto.uteis import openJuroComposto, calcLine, gerarJsonVazio
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
@@ -39,7 +39,26 @@ class IndexView(generic.ListView):
         return igpm.objects.order_by('-data')
 
 def atualizacao(request):
-    return render(request, 'juroComposto/atualizacao.html')
+    if 'upload' in request.FILES:
+        tempo = request.FILES['upload']
+        jct = openJuroComposto(tempo.read())
+        juroMes = jct['juroMes']
+        multa = jct['multa']
+        hono = jct['honorarios']
+        dc = parser.parse(jct['dataCalculo'])
+        for linha in jct['Linhas']:
+            valorD = linha['valorDevido']
+            dataD = parser.parse(linha['dataDivida'])
+            cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
+            linha['multa'] = cdo[0]
+            linha['igpmAcumulado'] = cdo[1]
+            linha['correcao'] = cdo[2]
+            linha['juros'] = cdo[3]
+            linha['honorarios'] = cdo[4]
+            linha['total'] = cdo[5]
+    else:
+        jct = gerarJsonVazio()
+    return render(request, 'juroComposto/atualizacao.html', {'jct':jct})
 
 #def detail(request, igpm_id):
 #    try:
@@ -98,5 +117,5 @@ def upload(request):
         #fss = FileSystemStorage()
         #file = fss.save(upload.name, upload)
         #file_url = fss.url(file)
-        return render(request, 'juroCompostoTable/', {'data': upload})
+        return render(request, 'atualizacao/', {'data': upload})
     return render(request, 'juroComposto/upload.html')
