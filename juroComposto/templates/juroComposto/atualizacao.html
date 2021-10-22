@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 <!doctype html>
 <html>
 <head>
@@ -13,36 +14,36 @@
                     cols: [{
                       name: 'dataDívida',
                       header: 'Data da Dívida',
-                      markup: '<input type="date" class="form-control">'
+                      markup: '<input type="date" class="form-control " style="text-align:center;">'
                     }, {
                       name: 'valorDevido',
                       header: 'Valor da Divida',
-                      markup: '<input type="number" class="form-control">',
+                      markup: '<input type="number" class="form-control" style="text-align:center;">',
                       defaultValue: '0'
                     }, {
                       name: 'multa',
                       header: 'Multa',
-                      markup: '<input type="number" class="form-control" disabled>'
+                      markup: '<input type="number" class="form-control" disabled style="text-align:center;">'
                     }, {
                       name: 'igpmAcumulado',
                       header: 'IGPM Acumulado',
-                      markup: '<input type="number" class="form-control" disabled>'
+                      markup: '<input type="number" class="form-control" disabled style="text-align:center;">'
                     }, {
                       name: 'correcao',
                       header: 'Correção',
-                      markup: '<input type="number" class="form-control" disabled>'
+                      markup: '<input type="number" class="form-control" disabled style="text-align:center;">'
                     }, {
                       name: 'juros',
                       header: 'Juros',
-                      markup: '<input type="number" class="form-control" disabled>'
+                      markup: '<input type="number" class="form-control" disabled style="text-align:center;">'
                     }, {
                       name: 'honorarios',
                       header: 'Honorarios',
-                      markup: '<input type="number" class="form-control" disabled>'
+                      markup: '<input type="number" class="form-control" disabled style="text-align:center;">'
                     }, {
                       name: 'total',
                       header: 'Total',
-                      markup: '<input type="number" class="form-control" disabled>'
+                      markup: '<input type="number" class="form-control" disabled style="text-align:center;">'
                     }, {
                           // Delete button needs no name, since this columns does not need to be exported to Json
                           markup: '<button title="delete this row">X</button>',
@@ -57,9 +58,7 @@
         }
 
         // load table with 2 rows of data
-      }).rsLiteGrid('setData', [
-
-        ]);
+      });
 
       // export data
       $('.dados + button').click(function () {
@@ -71,25 +70,49 @@
             $('.dados').rsLiteGrid('addRow');
             });
 
-      const dadosj = JSON.parse(document.getElementById('jct').textContent);
+
+      const dadosj = JSON.parse(document.getElementById('jct').textContent.split('\\\"').join('\"').replace('\"{','{').replace('}\"', '}'));
       //const dadosj = JSON.parse(dj);
+
       $('#multa').val(dadosj.multa);
       $('#juros').val(dadosj.juroMes);
       $('#honorarios').val(dadosj.honorarios);
       var d = new Date(dadosj.dataCalculo);
       $('#dataCalculo').val(d.toISOString().substr(0, d.toISOString().indexOf('T')));
 
+        //valorDevido_value, multa_value, igpmAcumulado_value, correcao_value, juros_value, honorarios_value, total_value
+      $('.dados').rsLiteGrid('setData',[
+            {% for linha in jct.Linhas %}
+                {dataDívida: '{{linha.dataDivida|cut:"T00:00:00.000Z"}}', valorDevido: {{linha.valorDevido}}.toFixed(2), multa: {{linha.multa}}.toFixed(2), igpmAcumulado: ({{linha.igpmAcumulado}}*100).toFixed(2), correcao: {{ linha.correcao }}.toFixed(2), juros: {{ linha.juros }}.toFixed(2), honorarios: {{ linha.honorarios }}.toFixed(2), total: {{linha.total}}.toFixed(2) } {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+      ]);
+
 
        $('.clickMe').click(function () {
-           $('.dados').rsLiteGrid('setData',
-                [{dataDívida: '2021-10-15', valorDevido: 100, multa: 10.10, igpmAcumulado: 5.5, correcao: 50.50, juros: 9.99, honorarios: 7.77, total: 8.88}]
-                                                    );
+            var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
+            var linhas = $('.dados').rsLiteGrid('getData');
+            json.Linhas = linhas;
+            console.log(JSON.stringify(json));
+                    $.ajax({
+                        type: "POST",
+                         url : '/atualizacao/',
+                         data: {
+                           csrfmiddlewaretoken: '{% csrf_token %}', //I've tried this with csrfmiddlewaretoken in '' and out of them.
+                          },
+                          dataType: "json",
+                          contentType: "application/json; charset=utf-8",
+                          success: function(data){
+                            $("user-list").html(data);
+                            console.log('User clicked: ' +  data)
+
+                            },
+                            failure: function(errMsg) {
+                              alert(errMsg);
+                            }
+                          });
+
        });
 
-        $('.teste').click(function () {
-            $('#multa').val("1");
-            alert("Eu sou um alert!");
-            });
 
     });
   </script>
@@ -98,18 +121,18 @@
 <div>
     <div>
         <label for="dataCalculo">Data de Cálculo</label>
-        <input type="date" class="dataCalculo" name="dataCalculo" id="dataCalculo">
+        <input type="date" class="dataCalculo" name="dataCalculo" id="dataCalculo" style="text-align:center;">
                 <br>
         <label for="multa">Multa</label>
-        <input type="number" class="multa" name="multa" id="multa" min="0" step="any">
+        <input type="number" class="multa" name="multa" id="multa" min="0" step="any" style="text-align:center;">
         <label for="multa">%</label>
                 <br>
         <label for="honorarios">Honorarios</label>
-        <input type="number" class="honorarios" name="honorarios" id="honorarios" min="0" step="any"}>
+        <input type="number" class="honorarios" name="honorarios" id="honorarios" min="0" step="any" style="text-align:center;">
         <label for="honorarios">%</label>
                 <br>
         <label for="juros">Juros</label>
-        <input type="number" class="juros" name="juros" id="juros" min="0" step="any"}>
+        <input type="number" class="juros" name="juros" id="juros" min="0" step="any" style="text-align:center;">
         <label for="juros">%</label>
                 <br>
     </div>
@@ -117,7 +140,7 @@
 	    <table class="dados"></table>
     </div>
     <br>
-    <input id="clickMe" class='clickMe' type="button" value="Teste Preeencher 1 linha" />
+    <input id="clickMe" class='clickMe' type="button" value="Teste Json" />
     <input id="addRow" class='addRow' type="button" value="Adicionar Linha" />
     <input id="teste" class='teste' type="button" value="teste" />
 </div>
