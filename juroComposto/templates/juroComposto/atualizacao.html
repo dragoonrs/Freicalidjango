@@ -1,3 +1,4 @@
+{% block content %}
 {% load static %}
 {% csrf_token %}
 <!doctype html>
@@ -93,24 +94,7 @@
             var linhas = $('.dados').rsLiteGrid('getData');
             json.Linhas = linhas;
             console.log(JSON.stringify(json));
-                    $.ajax({
-                        type: "POST",
-                         url : '/atualizacao/',
-                         data: {
-                           csrfmiddlewaretoken: '{% csrf_token %}', //I've tried this with csrfmiddlewaretoken in '' and out of them.
-                          },
-                          dataType: "json",
-                          contentType: "application/json; charset=utf-8",
-                          success: function(data){
-                            $("user-list").html(data);
-                            console.log('User clicked: ' +  data)
-
-                            },
-                            failure: function(errMsg) {
-                              alert(errMsg);
-                            }
-                          });
-
+            $('#upload').val(JSON.stringify(json));
        });
 
 
@@ -143,6 +127,14 @@
     <input id="clickMe" class='clickMe' type="button" value="Teste Json" />
     <input id="addRow" class='addRow' type="button" value="Adicionar Linha" />
     <input id="teste" class='teste' type="button" value="teste" />
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'juroComposto:atualizacao' %}" method="post">
+       {% csrf_token %}
+       <input type="hidden" id="upload" name="upload" >
+       <button class="btn btn-dark my-4" type="submit">Submit</button>
+    </form>
+
 </div>
 </body>
 </html>
+{% endblock %}

@@ -3,7 +3,7 @@
         <div class="container">
 
           <!--Simple Form-->
-          <h2 class="my-4">Add a new movie script</h2>
+          <h2 class="my-4">Escolher arquivo de calculo</h2>
           <form method="post" enctype="multipart/form-data" action="{% url 'juroComposto:atualizacao' %}" method="post">
             {% csrf_token %}
                 <input type="file" name="upload" accept=".json">

@@ -56,6 +56,26 @@ def atualizacao(request):
             linha['juros'] = cdo[3]
             linha['honorarios'] = cdo[4]
             linha['total'] = cdo[5]
+    elif request.POST.get('upload'):
+        tempo = request.POST.get('upload')
+        jct = openJuroComposto(tempo)
+        juroMes = jct['juroMes']
+        multa = jct['multa']
+        hono = jct['honorarios']
+        dc = parser.parse(jct['dataCalculo'])
+        for linha in jct['Linhas']:
+            valorD = linha['valorDevido']
+            try:
+                dataD = parser.parse(linha['dataDivida'])
+            except:
+                dataD = parser.isoparse(linha['dataDivida'])
+            cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
+            linha['multa'] = cdo[0]
+            linha['igpmAcumulado'] = cdo[1]
+            linha['correcao'] = cdo[2]
+            linha['juros'] = cdo[3]
+            linha['honorarios'] = cdo[4]
+            linha['total'] = cdo[5]
     else:
         jct = gerarJsonVazio()
     return render(request, 'juroComposto/atualizacao.html', {'jct':jct})
