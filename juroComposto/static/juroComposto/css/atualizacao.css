@@ -1,0 +1,11 @@
+td
+{
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.dados, table.dados th, table.dados td {
+  border: 1px solid black;
+}
+
+form {margin: 0; text-align: center;}

@@ -42,12 +42,12 @@ def atualizacao(request):
     if 'upload' in request.FILES:
         tempo = request.FILES['upload']
         jct = openJuroComposto(tempo.read())
-        juroMes = jct['juroMes']
-        multa = jct['multa']
-        hono = jct['honorarios']
+        juroMes = float(jct['juroMes'])
+        multa = float(jct['multa'])
+        hono = float(jct['honorarios'])
         dc = parser.parse(jct['dataCalculo'])
         for linha in jct['Linhas']:
-            valorD = linha['valorDevido']
+            valorD = float(linha['valorDevido'])
             dataD = parser.parse(linha['dataDivida'])
             cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
             linha['multa'] = cdo[0]
@@ -59,23 +59,23 @@ def atualizacao(request):
     elif request.POST.get('upload'):
         tempo = request.POST.get('upload')
         jct = openJuroComposto(tempo)
-        juroMes = jct['juroMes']
-        multa = jct['multa']
-        hono = jct['honorarios']
+        juroMes = float(jct['juroMes'])
+        multa = float(jct['multa'])
+        hono = float(jct['honorarios'])
         dc = parser.parse(jct['dataCalculo'])
         for linha in jct['Linhas']:
-            valorD = linha['valorDevido']
             try:
+                valorD = float(linha['valorDevido'])
                 dataD = parser.parse(linha['dataDivida'])
+                cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
+                linha['multa'] = cdo[0]
+                linha['igpmAcumulado'] = cdo[1]
+                linha['correcao'] = cdo[2]
+                linha['juros'] = cdo[3]
+                linha['honorarios'] = cdo[4]
+                linha['total'] = cdo[5]
             except:
-                dataD = parser.isoparse(linha['dataDivida'])
-            cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
-            linha['multa'] = cdo[0]
-            linha['igpmAcumulado'] = cdo[1]
-            linha['correcao'] = cdo[2]
-            linha['juros'] = cdo[3]
-            linha['honorarios'] = cdo[4]
-            linha['total'] = cdo[5]
+                del (jct['Linhas'][jct['Linhas'].index(linha)])
     else:
         jct = gerarJsonVazio()
     return render(request, 'juroComposto/atualizacao.html', {'jct':jct})
