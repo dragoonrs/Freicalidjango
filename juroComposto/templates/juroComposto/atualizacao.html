@@ -4,7 +4,10 @@
 <!doctype html>
 <html>
 <head>
-  <title>jquery-rsLiteGrid plug-in</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="HandheldFriendly" content="true">
+  <title>Freicali Atualizacao IGPM</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="{% static 'juroComposto/js/jquery.rsLiteGrid.js'%}"></script>
     {{ jct|json_script:"jct" }}
@@ -98,6 +101,25 @@
             $('#upload').val(JSON.stringify(json));
        });
 
+        $('.salvar').click(function () {
+            var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
+            var linhas = $('.dados').rsLiteGrid('getData');
+            json.Linhas = linhas;
+
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+
+                var arquivo = JSON.stringify(json),
+                blob = new Blob([arquivo], {type: "octet/stream"}),
+                url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = 'freicali' + (new Date($.now())).toISOString().replace(/-/g,"") + '.json';
+                a.click();
+                window.URL.revokeObjectURL(url);
+
+       });
+
 
     });
   </script>
@@ -160,6 +182,9 @@
                     </td>
                     <td>
                         <input id="addRow" class='addRow' type="button" value="Adicionar Linha" />
+                    </td>
+                    <td>
+                        <input id="salvar" class='salvar' type="button" value="Salvar" />
                     </td>
                 </tr>
         </table>
