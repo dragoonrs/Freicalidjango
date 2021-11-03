@@ -1,10 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+{% load static %}
+{% csrf_token %}
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="HandheldFriendly" content="true">
+  <title>Freicali Imprimir</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    {{ jct|json_script:"jct" }}
+    <link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
 </head>
 <body>
+<div>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <label for="dataCalculo">Data de Cálculo</label>
+                </td>
+                <td>
+                    <input type="date" class="dataCalculo" name="dataCalculo" id="dataCalculo" readonly value="{{ jct.dataCalculo|cut:"T00:00:00.000Z" }}" style="text-align:center;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="multa">Multa</label>
+                </td>
+                <td>
+                    <input type="number" class="multa" name="multa" id="multa" min="0" step="any" readonly value="{{ jct.multa }}" style="text-align:center;">
+                    <label for="multa">%</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="honorarios">Honorarios</label>
+                </td>
+                <td>
+                    <input type="number" class="honorarios" name="honorarios" id="honorarios" readonly value="{{ jct.honorarios }}" min="0" step="any" style="text-align:center;">
+                    <label for="honorarios">%</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="juros">Juros</label>
+                </td>
+                <td>
+                    <input type="number" class="juros" name="juros" id="juros" readonly value="{{ jct.juroMes }}" min="0" step="any" style="text-align:center;">
+                    <label for="juros">%</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+	    <table class="dados">
+            <tr>
+                <th>Data da Divida</th>
+                <th>Valor Devido</th>
+                <th>Multa</th>
+                <th>IGPM Acumulado</th>
+                <th>Correcao</th>
+                <th>Juros</th>
+                <th>Honorarios</th>
+                <th>Total</th>
+            </tr>
+            {% for linha in jct.Linhas %}
+                <tr>
+                    <td>{{linha.dataDivida|cut:"T00:00:00.000Z"}}</td>
+                    <td>{{linha.valorDevido}}</td>
+                    <td>{{linha.multa}}</td>
+                    <td>{{linha.igpmAcumulado}}</td>
+                    <td>{{ linha.correcao }}</td>
+                    <td>{{ linha.juros }}</td>
+                    <td>{{ linha.honorarios }}</td>
+                    <td>{{linha.total}}</td>
+                </tr>
+            {% endfor %}
 
+        </table>
+    </div>
+    <br>
+
+    <div>
+
+    </div>
+
+</div>
 </body>
 </html>
+{% endblock %}

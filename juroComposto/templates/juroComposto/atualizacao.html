@@ -101,6 +101,14 @@
             $('#upload').val(JSON.stringify(json));
        });
 
+       $('.imprimir').click(function () {
+            var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
+            var linhas = $('.dados').rsLiteGrid('getData');
+            json.Linhas = linhas;
+            console.log(JSON.stringify(json));
+            $('#uploadp').val(JSON.stringify(json));
+       });
+
         $('.salvar').click(function () {
             var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
             var linhas = $('.dados').rsLiteGrid('getData');
@@ -185,6 +193,13 @@
                     </td>
                     <td>
                         <input id="salvar" class='salvar' type="button" value="Salvar" />
+                    </td>
+                    <td>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'juroComposto:imprimir' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="uploadp" name="uploadp" >
+                            <button class="imprimir" id="imprimir" type="submit">Imprimir</button>
+                        </form>
                     </td>
                 </tr>
         </table>

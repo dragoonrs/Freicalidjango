@@ -144,8 +144,8 @@ def upload(request):
     return render(request, 'juroComposto/upload.html')
 
 def imprimir(request):
-    if request.POST.get('upload'):
-        tempo = request.POST.get('upload')
+    if request.POST.get('uploadp'):
+        tempo = request.POST.get('uploadp')
         jct = openJuroComposto(tempo)
         juroMes = float(jct['juroMes'])
         multa = float(jct['multa'])
@@ -166,4 +166,4 @@ def imprimir(request):
                 del (jct['Linhas'][jct['Linhas'].index(linha)])
     else:
         jct = gerarJsonVazio()
-    return render(request, 'juroComposto/atualizacao.html', {'jct':jct})
+    return render(request, 'juroComposto/imprimir.html', {'jct':jct})
