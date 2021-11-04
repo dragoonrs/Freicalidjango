@@ -7,12 +7,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="HandheldFriendly" content="true">
-  <title>Freicali Imprimir</title>
+  <title>Atualizado</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     {{ jct|json_script:"jct" }}
     <link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
 </head>
 <body>
+<br>
 <div>
     <div>
         <table>
@@ -53,28 +54,29 @@
             </tr>
         </table>
     </div>
+    <br>
     <div>
-	    <table class="dados">
+	    <table class="dados" style="width:100%">
             <tr>
                 <th>Data da Divida</th>
-                <th>Valor Devido</th>
-                <th>Multa</th>
-                <th>IGPM Acumulado</th>
-                <th>Correcao</th>
-                <th>Juros</th>
-                <th>Honorarios</th>
-                <th>Total</th>
+                <th>Valor Devido (R$)</th>
+                <th>Multa (R$)</th>
+                <th>IGPM Acumulado (%)</th>
+                <th>Correcao (R$)</th>
+                <th>Juros (R$)</th>
+                <th>Honorarios (R$)</th>
+                <th>Total (R$)</th>
             </tr>
             {% for linha in jct.Linhas %}
                 <tr>
                     <td>{{linha.dataDivida|cut:"T00:00:00.000Z"}}</td>
                     <td>{{linha.valorDevido}}</td>
-                    <td>{{linha.multa}}</td>
-                    <td>{{linha.igpmAcumulado}}</td>
-                    <td>{{ linha.correcao }}</td>
-                    <td>{{ linha.juros }}</td>
-                    <td>{{ linha.honorarios }}</td>
-                    <td>{{linha.total}}</td>
+                    <td>{{linha.multa|stringformat:".2f"}}</td>
+                    <td>{{linha.igpmAcumulado|stringformat:".2f"}}</td>
+                    <td>{{ linha.correcao|stringformat:".2f" }}</td>
+                    <td>{{ linha.juros|stringformat:".2f" }}</td>
+                    <td>{{ linha.honorarios|stringformat:".2f" }}</td>
+                    <td>{{linha.total|stringformat:".2f"}}</td>
                 </tr>
             {% endfor %}
 

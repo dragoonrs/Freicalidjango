@@ -133,6 +133,7 @@
   </script>
 </head>
 <body>
+<br>
 <div>
     <div>
         <table>
@@ -173,6 +174,7 @@
             </tr>
         </table>
     </div>
+    <br>
     <div>
 	    <table class="dados"></table>
     </div>
@@ -181,6 +183,14 @@
     <div>
         <table>
                 <tr>
+                    <td style="text-alight: left;">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'juroComposto:atualizacao' %}" method="post">
+                        {% csrf_token %}
+                            <input type="file" name="upload" accept=".json">
+                            <br>
+                            <button class="btn btn-dark my-4" type="submit">Carregar Arquivo</button>
+                        </form>
+                    </td>
                     <td>
                         <form method="post" enctype="multipart/form-data" action="{% url 'juroComposto:atualizacao' %}" method="post">
                             {% csrf_token %}

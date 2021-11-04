@@ -157,7 +157,7 @@ def imprimir(request):
                 dataD = parser.parse(linha['dataDivida'])
                 cdo = calcLine(juroMes, multa, hono, dc, dataD, valorD)
                 linha['multa'] = cdo[0]
-                linha['igpmAcumulado'] = cdo[1]
+                linha['igpmAcumulado'] = cdo[1]*100
                 linha['correcao'] = cdo[2]
                 linha['juros'] = cdo[3]
                 linha['honorarios'] = cdo[4]
