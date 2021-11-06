@@ -48,7 +48,7 @@ def calcLine(juroMes, multa, honorarios, dataCalculo, dataDivida, valorDevido):
         linha[2] = (valorDevido + linha[0])*linha[1]
         linha[3] = (valorDevido + linha[0]) * ((pow(1+(juroMes/100), meses(dataDivida, dataCalculo)))-1)
         linha[4] = (valorDevido + linha[0] + linha[3])*((honorarios/100))
-        linha[5] = linha[0] + linha[2] + linha[3] + linha[4]
+        linha[5] = valorDevido + linha[0] + linha[2] + linha[3] + linha[4]
         return linha
 
 def gerarJsonVazio():
