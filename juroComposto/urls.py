@@ -12,6 +12,8 @@ urlpatterns = [
     path('updateIgpm/<int:igpm_id>/', views.updateIgpm, name='updateIgpm'),
     path('juroCompostoTable/', views.juroCompostoTable, name='juroCompostoTable'),
     path("upload/", views.upload, name="upload"),
-    path("", views.atualizacao, name="atualizacao"),
-    path("imprimir/", views.imprimir, name="imprimir")
+    path("atualizacao", views.atualizacao, name="atualizacao"),
+    path("imprimir/", views.imprimir, name="imprimir"),
+    path("", views.main, name="main"),
+    path("splash", views.splash, name="splash")
 ]

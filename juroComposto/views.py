@@ -167,3 +167,9 @@ def imprimir(request):
     else:
         jct = gerarJsonVazio()
     return render(request, 'juroComposto/imprimir.html', {'jct':jct})
+
+def main(request):
+    return render(request, 'juroComposto/main.html')
+
+def splash(request):
+    return render(request, 'juroComposto/splash.html')
