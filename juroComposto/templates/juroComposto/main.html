@@ -1,21 +1,17 @@
-{% block content %}
 {% load static %}
 {% csrf_token %}
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Freicali</title>
-</head>
+<html>
 <body>
-    <div id="menu">
-           <ul>
-                <li><a href="{% url 'juroComposto:atualizacao' %}" target="content"> Atualizacao IGPM </a></li>
-                <li><a href="" target="content" disabled> Parcelamento </a></li>
-                <li><a href="./admin/" target="content"> Link 3 </a></li>
-           </ul>
-    </div>
-    <div id="content"><iframe name="content" src="{% url 'juroComposto:splash' %}"></iframe></div>
+<link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
+<link rel="stylesheet" href="{% static 'juroComposto/css/base.css'%}">
+<div class="sidebar">
+    <a href="{% url 'juroComposto:atualizacao' %}" target="content"> Atualizacao IGPM </a>
+    <a href="" target="content" disabled> Parcelamento </a>
+    <a href="./admin/" target="content"> Administracao </a>
+</div>
+<div class="center">
+    <img src="{% static 'juroComposto/img/splash.png'%}" width="216" height="200">
+</div>
 </body>
-
 </html>
-{% endblock %}

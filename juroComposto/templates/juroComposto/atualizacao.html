@@ -12,6 +12,7 @@
   <script src="{% static 'juroComposto/js/jquery.rsLiteGrid.js'%}"></script>
     {{ jct|json_script:"jct" }}
     <link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
+    <link rel="stylesheet" href="{% static 'juroComposto/css/base.css'%}">
   <script>
     $(document).ready(function () {
       $('.dados').rsLiteGrid({
@@ -71,6 +72,7 @@
         alert('Open your browser console to see the Json data.');
       });
 
+
       $('.addRow').click(function () {
             $('.dados').rsLiteGrid('addRow');
             });
@@ -100,6 +102,7 @@
             console.log(JSON.stringify(json));
             $('#upload').val(JSON.stringify(json));
        });
+
 
        $('.imprimir').click(function () {
             var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
@@ -133,6 +136,12 @@
   </script>
 </head>
 <body>
+
+<div class="sidebar">
+    <a href="{% url 'juroComposto:atualizacao' %}"> Atualizacao IGPM </a>
+    <a href=""  disabled> Parcelamento </a>
+    <a href="./admin/" > Administracao </a>
+</div>
 <br>
 <div>
     <div>
@@ -184,11 +193,11 @@
         <table>
                 <tr>
                     <td style="text-align: left;">
-                        <form method="post" enctype="multipart/form-data" action="{% url 'juroComposto:atualizacao' %}" method="post">
+                        <form method="post" name="escolherArquivo" enctype="multipart/form-data" action="{% url 'juroComposto:atualizacao' %}" method="post">
                         {% csrf_token %}
-                            <input type="file" name="upload" accept=".json">
+                            <input type="file" name="upload" onchange="form.submit()" accept=".json">
                             <br>
-                            <button class="btn btn-dark my-4" type="submit">Carregar Arquivo</button>
+                            <button class="btn" name="carregar" type="submit" style="display:none;">Carregar Arquivo</button>
                         </form>
                     </td>
                     <td>

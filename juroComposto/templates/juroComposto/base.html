@@ -1,0 +1,13 @@
+{% load static %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html>
+<body>
+<link rel="stylesheet" href="{% static 'juroComposto/css/base.css'%}">
+<div class="sidebar">
+    <li><a href="{% url 'juroComposto:atualizacao' %}" target="content"> Atualizacao IGPM </a></li>
+    <li><a href="" target="content" disabled> Parcelamento </a></li>
+    <li><a href="./admin/" target="content"> Link 3 </a></li>
+</div>
+</body>
+</html>
