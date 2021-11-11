@@ -84,6 +84,9 @@
       $('#multa').val(dadosj.multa);
       $('#juros').val(dadosj.juroMes);
       $('#honorarios').val(dadosj.honorarios);
+      $('#processo').val(dadosj.processo);
+      $('#titulo').val(dadosj.titulo);
+      $('#advogado').val(dadosj.advogado);
       var d = new Date(dadosj.dataCalculo);
       $('#dataCalculo').val(d.toISOString().substr(0, d.toISOString().indexOf('T')));
 
@@ -96,7 +99,7 @@
 
 
        $('.calcular').click(function () {
-            var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
+            var json = 	{"processo": $('#processo').val(), "titulo": $('#titulo').val(), "advogado": $('#advogado').val(), "juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
             var linhas = $('.dados').rsLiteGrid('getData');
             json.Linhas = linhas;
             console.log(JSON.stringify(json));
@@ -105,7 +108,7 @@
 
 
        $('.imprimir').click(function () {
-            var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
+            var json = 	{"processo": $('#processo').val(), "titulo": $('#titulo').val(), "advogado": $('#advogado').val(), "juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
             var linhas = $('.dados').rsLiteGrid('getData');
             json.Linhas = linhas;
             console.log(JSON.stringify(json));
@@ -113,7 +116,7 @@
        });
 
         $('.salvar').click(function () {
-            var json = 	{"juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
+            var json = 	{"processo": $('#processo').val(), "titulo": $('#titulo').val(), "advogado": $('#advogado').val(), "juroMes": $('#juros').val(),"multa": $('#multa').val(),"honorarios": $('#honorarios').val(),"dataCalculo": (new Date($('#dataCalculo').val())).toISOString()};
             var linhas = $('.dados').rsLiteGrid('getData');
             json.Linhas = linhas;
 
@@ -146,6 +149,30 @@
 <div>
     <div>
         <table>
+            <tr>
+                <td>
+                    <label for="processo">Nr do Processo</label>
+                </td>
+                <td>
+                    <input type="text" class="processo" name="processo" id="processo" style="text-align:center;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="titulo">Titulo</label>
+                </td>
+                <td>
+                    <input type="text" class="titulo" name="titulo" id="titulo" style="text-align:center;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="advogado">Advogado</label>
+                </td>
+                <td>
+                    <input type="text" class="advogado" name="advogado" id="advogado" style="text-align:center;">
+                </td>
+            </tr>
             <tr>
                 <td>
                     <label for="dataCalculo">Data de Cálculo</label>

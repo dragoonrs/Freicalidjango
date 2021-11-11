@@ -52,5 +52,5 @@ def calcLine(juroMes, multa, honorarios, dataCalculo, dataDivida, valorDevido):
         return linha
 
 def gerarJsonVazio():
-    dados = {	"juroMes": 0,	"multa": 0,	"honorarios": 0,	"dataCalculo": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S %z'), 'Linhas':[]}
+    dados = {	"processo": "", "titulo": "", "advogado": "", "juroMes": 0,	"multa": 0,	"honorarios": 0, "dataCalculo": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S %z'), 'Linhas':[]}
     return json.dumps(dados)

@@ -7,7 +7,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="HandheldFriendly" content="true">
+  {% if jct.processo or jct.titulo %}
+    <title>{{ jct.processo }} {{ jct.titulo }}</title>
+  {% else %}
   <title>Atualizado</title>
+  {% endif %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     {{ jct|json_script:"jct" }}
     <link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
@@ -83,9 +87,11 @@
         </table>
     </div>
     <br>
-
+    <br>
     <div>
-
+          {% if jct.advogado %}
+            {{ jct.advogado }}
+          {% endif %}
     </div>
 
 </div>
