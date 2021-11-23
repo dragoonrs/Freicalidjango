@@ -12,8 +12,10 @@
   <script src="{% static 'juroComposto/js/jquery.rsLiteGrid.js'%}"></script>
     {{ jct|json_script:"jct" }}
     <link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
-    <link rel="stylesheet" href="{% static 'juroComposto/css/base.css'%}">
   <script>
+
+    var preferencia;
+
     $(document).ready(function () {
       $('.dados').rsLiteGrid({
 
@@ -90,6 +92,30 @@
       var d = new Date(dadosj.dataCalculo);
       $('#dataCalculo').val(d.toISOString().substr(0, d.toISOString().indexOf('T')));
 
+      const linhas = dadosj.Linhas;
+      var dtotal = 0.0;
+      var dvalor = 0.0;
+      var dmulta = 0.0;
+      var dhonorarios = 0.0;
+      var djuros = 0.0;
+      var dcorrecao = 0.0;
+
+
+      for (var ln in linhas) {
+            dtotal += parseFloat(linhas[ln].total.toFixed(2));
+            dvalor += parseFloat(parseFloat(linhas[ln].valorDevido).toFixed(2));
+            dmulta += parseFloat(linhas[ln].multa.toFixed(2));
+            dhonorarios += parseFloat(linhas[ln].honorarios.toFixed(2));
+            djuros += parseFloat(linhas[ln].juros.toFixed(2));
+            dcorrecao += parseFloat(linhas[ln].correcao.toFixed(2));
+      }
+      $('#totalTotal').val(dtotal.toFixed(2));
+      $('#totalValor').val(dvalor.toFixed(2));
+      $('#totalMulta').val(dmulta.toFixed(2));
+      $('#totalHonorarios').val(dhonorarios.toFixed(2));
+      $('#totalJuros').val(djuros.toFixed(2));
+      $('#totalCorrecao').val(dcorrecao.toFixed(2));
+
         //valorDevido_value, multa_value, igpmAcumulado_value, correcao_value, juros_value, honorarios_value, total_value
       $('.dados').rsLiteGrid('setData',[
             {% for linha in jct.Linhas %}
@@ -125,10 +151,14 @@
             a.style = "display: none";
 
                 var arquivo = JSON.stringify(json),
-                blob = new Blob([arquivo], {type: "octet/stream"}),
+                blob = new Blob([arquivo], {type: "octet/stream"});
                 url = window.URL.createObjectURL(blob);
                 a.href = url;
-                a.download = 'freicali' + (new Date($.now())).toISOString().replace(/-/g,"") + '.json';
+                nomeArquivo = $('#processo').val() + " " + $('#titulo').val();
+                if(nomeArquivo.trim() === ""){
+                  nomeArquivo = 'freicali' + (new Date($.now())).toISOString().replace(/-/g,"");
+                }
+                a.download = nomeArquivo.trim() + '.json';
                 a.click();
                 window.URL.revokeObjectURL(url);
 
@@ -140,9 +170,9 @@
 </head>
 <body>
 
-<div class="sidebar">
+<div class="sidebar" name="sidebar">
     <a href="{% url 'juroComposto:atualizacao' %}"> Atualizacao IGPM </a>
-    <a href=""  disabled> Parcelamento </a>
+    <a href=""  disabled> Parcelamento (em construção) </a>
     <a href="./admin/" > Administracao </a>
 </div>
 <br>
@@ -212,7 +242,37 @@
     </div>
     <br>
     <div>
-	    <table class="dados"></table>
+	    <table class="dados" style="border: 1px solid black;"></table>
+        <table class="total" style="border: 1px solid black; width: 1436px">
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" style="text-align:center;border: 1px solid black; width: 143px" disabled value="Totais">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" id="totalValor" style="text-align:center;border: 1px solid black;" disabled>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" disabled id="totalMulta" style="text-align:center;border: 1px solid black;"></td>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" disabled style="text-align:center;border: 1px solid black;">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" disabled id="totalCorrecao" style="text-align:center;border: 1px solid black;">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" disabled id="totalJuros" style="text-align:center;border: 1px solid black;">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" disabled id="totalHonorarios" style="text-align:center;border: 1px solid black;">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" disabled id="totalTotal" style="text-align:center;border: 1px solid black;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <br>
 

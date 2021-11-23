@@ -14,9 +14,38 @@
   {% endif %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     {{ jct|json_script:"jct" }}
-    <link rel="stylesheet" href="{% static 'juroComposto/css/atualizacao.css'%}">
+    <link rel="stylesheet" href="{% static 'juroComposto/css/imprimir.css'%}">
 </head>
 <body>
+<script>
+    $(document).ready(function () {
+        const dadosj = JSON.parse(document.getElementById('jct').textContent.split('\\\"').join('\"').replace('\"{','{').replace('}\"', '}'));
+      const linhas = dadosj.Linhas;
+      var dtotal = 0.0;
+      var dvalor = 0.0;
+      var dmulta = 0.0;
+      var dhonorarios = 0.0;
+      var djuros = 0.0;
+      var dcorrecao = 0.0;
+
+      console.log(linhas);
+
+      for (var ln in linhas) {
+            dtotal += parseFloat(linhas[ln].total.toFixed(2));
+            dvalor += parseFloat(parseFloat(linhas[ln].valorDevido).toFixed(2));
+            dmulta += parseFloat(linhas[ln].multa.toFixed(2));
+            dhonorarios += parseFloat(linhas[ln].honorarios.toFixed(2));
+            djuros += parseFloat(linhas[ln].juros.toFixed(2));
+            dcorrecao += parseFloat(linhas[ln].correcao.toFixed(2));
+      }
+      $('#totalTotal').html(dtotal.toFixed(2));
+      $('#totalValor').html(dvalor.toFixed(2));
+      $('#totalMulta').html(dmulta.toFixed(2));
+      $('#totalHonorarios').html(dhonorarios.toFixed(2));
+      $('#totalJuros').html(djuros.toFixed(2));
+      $('#totalCorrecao').html(dcorrecao.toFixed(2));
+    });
+</script>
 <br>
 <div>
     <div>
@@ -83,7 +112,16 @@
                     <td>{{linha.total|stringformat:".2f"}}</td>
                 </tr>
             {% endfor %}
-
+                <tr>
+                    <td>Totais</td>
+                    <td id="totalValor"></td>
+                    <td id="totalMulta"></td>
+                    <td></td>
+                    <td id="totalCorrecao"></td>
+                    <td id="totalJuros"></td>
+                    <td id="totalHonorarios"></td>
+                    <td id="totalTotal"></td>
+                </tr>
         </table>
     </div>
     <br>

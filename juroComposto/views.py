@@ -46,6 +46,7 @@ def atualizacao(request):
         multa = float(jct['multa'])
         hono = float(jct['honorarios'])
         dc = parser.parse(jct['dataCalculo'])
+
         for linha in jct['Linhas']:
             try:
                 valorD = float(linha['valorDevido'])
@@ -83,12 +84,6 @@ def atualizacao(request):
         jct = gerarJsonVazio()
     return render(request, 'juroComposto/atualizacao.html', {'jct':jct})
 
-#def detail(request, igpm_id):
-#    try:
-#        igpmt = igpm.objects.get(pk=igpm_id)
-#    except igpm.DoesNotExist:
-#        raise Http404("igpm does not exist")
-#    return render(request, 'juroComposto/detail.html', {'igpm': igpmt})
 
 class DetailView(generic.DetailView):
     model = igpm
@@ -110,9 +105,6 @@ def updateIgpm(request, igpm_id):
         igpmt.taxa = newTaxa
         igpmt.multiplicadorAbsoluto = 1 + (newTaxa/100)
         igpmt.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(reverse('juroComposto:index'))
 
 def juroCompostoTable(request):
